@@ -30,10 +30,17 @@ lines = ["I hate this.",
     "I can not tell if I am crying.", 
     "I just spent 7 hours playing with fonts."]
 
+lines = [line.replace('.', '') for line in lines]
+
+tokenized_sens = [word_tokenize(sen) for sen in lines]
+
 taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
-print(taggedSens)
+#print(taggedSens)
 taggedWords = reduce(listConcat, taggedSens, [])
 #print(taggedWords)
+
+for sent in taggedSens:
+    print(sent)
 
 tagPossb = {}
 for (word, tag) in taggedWords:
@@ -45,6 +52,30 @@ for (word, tag) in taggedWords:
         tagPossb[tag] = tuple(words)
 
 # get rid of the period because it doesn't matter
-tagPossb.pop('.', None)
+# tagPossb.pop('.', None)
 
-print("\n".join(makeBottomPly(tagPossb)))
+firstPlyRules = "\n".join(makeBottomPly(tagPossb))
+
+#print(firstPlyRules)
+
+higherLevelRules = """
+S -> NP VP | RB S | S VP
+VP -> MD VP | VBD S | VBN PP | TO VP | VBP VP | VBP DT | VB S | VBZ JJ | VBZ DT JJS | VBP PRP
+PP -> IN NP
+NP -> NN | DT NN | DT NNS | PRP | DT JJ NN | VBG
+"""
+rules = higherLevelRules + firstPlyRules
+
+grammar = nltk.CFG.fromstring(rules)
+
+print(rules)
+
+for sent in tokenized_sens:
+    print(sent)
+    for tree in nltk.ChartParser(grammar).parse(sent):
+        print(tree)
+
+
+
+#print(grammar.productions())
+#print([(sen, grammar.check_coverage([y for (x, y) in word_tokenize(sen)])) for sen in lines])
