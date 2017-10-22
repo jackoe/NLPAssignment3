@@ -6,6 +6,15 @@ def listConcat(x, y):
     x.extend(y)
     return x
 
+[x ** 2 for x in range(4, 10)]
+
+def formatWordList(words):
+    valsAsStrs =['"' + x + '"' for x in words]
+    joined = " | ".join(valsAsStrs)
+    return joined
+
+def makeBottomPly(tagPossb):
+    return [key + ' -> ' + formatWordList(words) for key, words in tagPossb.items()]
 
 
 lines = ["I hate this.", 
@@ -14,7 +23,7 @@ lines = ["I hate this.",
     "Sometimes I feel like I was born with a leak.", 
     "Any goodness I started with just slowly spilled out of me.", 
     "Now it is all gone.", 
-    "You didn’t know me .", 
+    "You didn't know me.", 
     "Then you fell in love with me.", 
     "Now you know me.", 
     "I need to go take a shower.", 
@@ -22,7 +31,7 @@ lines = ["I hate this.",
     "I just spent 7 hours playing with fonts."]
 
 taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
-#print(taggedSens)
+print(taggedSens)
 taggedWords = reduce(listConcat, taggedSens, [])
 #print(taggedWords)
 
@@ -31,9 +40,11 @@ for (word, tag) in taggedWords:
     if tag not in tagPossb:
         tagPossb[tag] = word,
     else:
-        words = list(tagPossb[tag])
-        words.append(word)
+        words = set(tagPossb[tag])
+        words.add(word)
         tagPossb[tag] = tuple(words)
 
-print(tagPossb)
+# get rid of the period because it doesn't matter
+tagPossb.pop('.', None)
 
+print("\n".join(makeBottomPly(tagPossb)))
