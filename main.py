@@ -82,63 +82,63 @@ for sent in tokenized_sens:
     for tree in nltk.ChartParser(grammar).parse(sent):
         print(tree)
 
+
 wordToWord = {
-    "7":"7"
-    "this":"esto"
-    "the":"el"
-    "a":"un"
-    "any":"cualquier"
-    "all":"todo"
-    "like":"como"
-    "with":"con"
-    "out":"fuera"
-    "of":"de"
-    "in":"en"
-    "with":"con"
-    "if":"si"
-    "terrible":"terrible"
-    "worst":"peor"
-    "can":"puede"
-    "everything":"todo"
-    "leak":"fuga"
-    "goodness":"bondad"
-    "love":"amor"
-    "shower":"ducha"
-    "running":"corriendo"
-    "hours":"horas"
-    "fonts":"fuentes"
-    "I":"yo"
-    "me":"yo"
-    "it":"ello"
-    "you":"usted"
-    "sometimes":"a veces"
-    "just":"solo"
-    "slowly":"lentamente"
-    "now":"ahora"
-    "then":"entonces"
-    "not":"no"
-    "to":"a"
-    "know":"saber"
-    "go":"ir"
-    "take":"tomar"
-    "tell":"decir"
-    "was":"era"
-    "started":"comenzo"
-    "did":"hizo"
-    "fell":"cayo"
-    "spent":"gastado"
-    "crying":"llorando"
-    "playing":"jugando"
-    "born":"nacido"
-    "spilled":"derramado"
-    "gone":"ido"
-    "hate":"odio"
-    "feel":"sentir"
-    "know":"saber"
-    "need":"necesidad"
-    "am":"soy"
+    "7":"7",
+    "this":"esto",
+    "the":"el",
+    "a":"un",
+    "any":"cualquier",
+    "all":"todo",
+    "like":"como",
+    "with":"con",
+    "out":"fuera",
+    "of":"de",
+    "in":"en",
+    "with":"con",
+    "if":"si",
+    "terrible":"terrible",
+    "worst":"peor",
+    "can":"puede",
+    "everything":"todo",
+    "leak":"fuga",
+    "goodness":"bondad",
+    "love":"amor",
+    "shower":"ducha",
+    "running":"corriendo",
+    "hours":"horas",
+    "fonts":"fuentes",
+    "I":"yo",
+    "me":"yo",
+    "it":"ello",
+    "you":"usted",
+    "sometimes":"a veces",
+    "just":"solo",
+    "slowly":"lentamente",
+    "now":"ahora",
+    "then":"entonces",
+    "not":"no",
+    "to":"a",
+    "know":"saber",
+    "go":"ir",
+    "take":"tomar",
+    "tell":"decir",
+    "was":"era",
+    "started":"comenzo",
+    "did":"hizo",
+    "fell":"cayo",
+    "spent":"gastado",
+    "crying":"llorando",
+    "playing":"jugando",
+    "born":"nacido",
+    "spilled":"derramado",
+    "gone":"ido",
+    "hate":"odio",
+    "feel":"sentir",
+    "know":"saber",
+    "need":"necesidad",
+    "am":"soy",
     "is":"es"
 }
-
 #print(grammar.productions())
 #print([(sen, grammar.check_coverage([y for (x, y) in word_tokenize(sen)])) for sen in lines])
