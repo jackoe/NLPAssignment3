@@ -12,4 +12,5 @@ lines = ["I hate this.",
     "I can not tell if I am crying.", 
     "I just spent 7 hours playing with fonts."]
 
-print(lines[0])
+taggedWords = [nltk.pos_tag(sen.split()) for sen in lines]
+print(taggedWords)
