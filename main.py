@@ -1,4 +1,5 @@
 import nltk
+from nltk import word_tokenize
 from functools import reduce
 
 def listConcat(x, y):
@@ -20,15 +21,15 @@ lines = ["I hate this.",
     "I can not tell if I am crying.", 
     "I just spent 7 hours playing with fonts."]
 
-taggedSens = [nltk.pos_tag(sen.split()) for sen in lines]
-print(taggedSens)
+taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
+#print(taggedSens)
 taggedWords = reduce(listConcat, taggedSens, [])
-print(taggedWords)
+#print(taggedWords)
 
 tagPossb = {}
 for (word, tag) in taggedWords:
     if tag not in tagPossb:
-        tagPossb[tag] = word
+        tagPossb[tag] = word,
     else:
         words = list(tagPossb[tag])
         words.append(word)
