@@ -142,6 +142,20 @@ wordToWord = {"7":"7",
     "am":"soy",
     "is":"es"}
 
+googleTranslate = ["Odio esto.",
+    "Correr es terrible.",
+    "Todo es lo peor.",
+    "A veces siento que nací con una fuga.",
+    "Cualquier bondad que empecé con sólo se derramó fuera de mí.",
+    "Ahora todo se ha ido.",
+    "No me conoces.",
+    "Entonces te enamoraste de mi.",
+    "Ahora me conoces.",
+    "Necesito ir a bańarme.",
+    "No puedo decir si estoy llorando.",
+    "Acabo de pasar 7 horas jugando con las fuentes."]
+
+
 espn = [" ".join([wordToWord[wor] for wor in sent]) for sent in tokenized_sens]
 espn = [s[0].upper() + s[1:] + '.' for s in espn]
 print(espn)
