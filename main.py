@@ -167,7 +167,6 @@ googleTranslate = [s.replace('.', '') for s in googleTranslate]
 
 espn = [" ".join([wordToWord[wor] for wor in sent]) for sent in tokenized_sens]
 espn = [s[0].upper() + s[1:] for s in espn]
-# print(espn)
 
 bleu = []
 for i in range(len(espn)):
@@ -176,10 +175,6 @@ for i in range(len(espn)):
         sourceNgrams = list(ngrams(nltk.word_tokenize(espn[i]), j))
         standardNgrams = list(ngrams(nltk.word_tokenize(googleTranslate[i]), j))
         hits = overlap(sourceNgrams, standardNgrams)
-        print(sourceNgrams)
-        print(standardNgrams)
-        # print(len(sourceNgrams))
-        # print('\n')
         if hits != 0:
             scores.append(hits / len(sourceNgrams))
     if len(scores) != 0:
