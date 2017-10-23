@@ -3,6 +3,13 @@ from nltk import word_tokenize
 from nltk.util import ngrams
 from functools import reduce
 
+def overlap(from_l, to_l):
+    to_s = set(to_l)
+    count = 0
+    for item in from_l:
+        count += item in to_s
+    return count
+
 def listConcat(x, y):
     x.extend(y)
     return x
@@ -164,22 +171,18 @@ espn = [s[0].upper() + s[1:] for s in espn]
 
 bleu = []
 for i in range(len(espn)):
-    scores = [0, 0, 0, 0]
-    hits = 0
+    scores = []
     for j in range(1, 5):
         sourceNgrams = list(ngrams(nltk.word_tokenize(espn[i]), j))
         standardNgrams = list(ngrams(nltk.word_tokenize(googleTranslate[i]), j))
-        for item in sourceNgrams:
-            if item in standardNgrams:
-                hits += 1
-        # print(hits)
+        hits = overlap(sourceNgrams, standardNgrams)
         print(sourceNgrams)
         print(standardNgrams)
         # print(len(sourceNgrams))
         # print('\n')
-        scores[j - 1] = hits / len(sourceNgrams)
-        #print(scores)
-    bleu.append(sum(scores) / 4)
+        if hits != 0:
+            scores.append(hits / len(sourceNgrams))
+    bleu.append(sum(scores) / len(scores))
 print(bleu)
 
 #print(grammar.productions())
