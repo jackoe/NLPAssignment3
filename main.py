@@ -1,5 +1,6 @@
 import nltk
 from nltk import word_tokenize
+from nltk.util import ngrams
 from functools import reduce
 
 def listConcat(x, y):
@@ -145,19 +146,41 @@ wordToWord = {"7":"7",
 googleTranslate = ["Odio esto.",
     "Correr es terrible.",
     "Todo es lo peor.",
-    "A veces siento que nací con una fuga.",
-    "Cualquier bondad que empecé con sólo se derramó fuera de mí.",
+    "A veces siento que naci con una fuga.",
+    "Cualquier bondad que empece con sólo se derramo fuera de mi.",
     "Ahora todo se ha ido.",
     "No me conoces.",
     "Entonces te enamoraste de mi.",
     "Ahora me conoces.",
-    "Necesito ir a bańarme.",
+    "Necesito ir a banarme.",
     "No puedo decir si estoy llorando.",
     "Acabo de pasar 7 horas jugando con las fuentes."]
 
+googleTranslate = [s.replace('.', '') for s in googleTranslate]
 
-espn = [" ".join([wordToWord[wor] for wor in sent]) for sent in tokenized_sens]
-espn = [s[0].upper() + s[1:] + '.' for s in espn]
-print(espn)
+espn = [" ".join([wordToWord[wor] for wor in sent] for sent in tokenized_sens]
+espn = [s[0].upper() + s[1:] for s in espn]
+# print(espn)
+
+bleu = []
+for i in range(len(espn)):
+    scores = [0, 0, 0, 0]
+    hits = 0
+    for j in range(1, 5):
+        sourceNgrams = list(ngrams(nltk.word_tokenize(espn[i]), j))
+        standardNgrams = list(ngrams(nltk.word_tokenize(googleTranslate[i]), j))
+        for item in sourceNgrams:
+            if item in standardNgrams:
+                hits += 1
+        # print(hits)
+        print(sourceNgrams)
+        print(standardNgrams)
+        # print(len(sourceNgrams))
+        # print('\n')
+        scores[j - 1] = hits / len(sourceNgrams)
+        #print(scores)
+    bleu.append(sum(scores) / 4)
+print(bleu)
+
 #print(grammar.productions())
 #print([(sen, grammar.check_coverage([y for (x, y) in word_tokenize(sen)])) for sen in lines])
