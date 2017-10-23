@@ -165,7 +165,7 @@ googleTranslate = ["Odio esto.",
 
 googleTranslate = [s.replace('.', '') for s in googleTranslate]
 
-espn = [" ".join([wordToWord[wor] for wor in sent] for sent in tokenized_sens]
+espn = [" ".join([wordToWord[wor] for wor in sent]) for sent in tokenized_sens]
 espn = [s[0].upper() + s[1:] for s in espn]
 # print(espn)
 
@@ -182,7 +182,8 @@ for i in range(len(espn)):
         # print('\n')
         if hits != 0:
             scores.append(hits / len(sourceNgrams))
-    bleu.append(sum(scores) / len(scores))
+    if len(scores) != 0:
+        bleu.append(sum(scores) / len(scores))
 print(bleu)
 
 #print(grammar.productions())
