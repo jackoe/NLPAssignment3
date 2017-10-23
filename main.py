@@ -22,18 +22,21 @@ def lowerCaseFirstCharacter(s):
     else:
         return s[0].lower() + s[1:]
 
-lines = ["I hate this.", 
-    "Running is terrible.", 
-    "Everything is the worst.", 
-    "Sometimes I feel like I was born with a leak.", 
-    "Any goodness I started with just slowly spilled out of me.", 
-    "Now it is all gone.", 
-    "You didn't know me.", 
-    "Then you fell in love with me.", 
-    "Now you know me.", 
-    "I need to go take a shower.", 
-    "I can not tell if I am crying.", 
+lines = ["I hate this.",
+    "Running is terrible.",
+    "Everything is the worst.",
+    "Sometimes I feel like I was born with a leak.",
+    "Any goodness I started with just slowly spilled out of me.",
+    "Now it is all gone.",
+    "You did not know me.",
+    "Then you fell in love with me.",
+    "Now you know me.",
+    "I need to go take a shower.",
+    "I can not tell if I am crying.",
     "I just spent 7 hours playing with fonts."]
+
+# for s in lines:
+#     s.replace("didn't", "did not")
 
 lines = [lowerCaseFirstCharacter(line.replace('.', '')) for line in lines]
 
@@ -44,8 +47,8 @@ taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
 taggedWords = reduce(listConcat, taggedSens, [])
 #print(taggedWords)
 
-for sent in taggedSens:
-    print(sent)
+#for sent in taggedSens:
+    #print(sent)
 
 tagPossb = {}
 for (word, tag) in taggedWords:
@@ -76,15 +79,14 @@ rules = higherLevelRules + firstPlyRules
 
 grammar = nltk.CFG.fromstring(rules)
 
-print('----------------------\n\n\n')
-for sent in tokenized_sens:
-    print(sent)
-    for tree in nltk.ChartParser(grammar).parse(sent):
-        print(tree)
+#print('----------------------\n\n\n')
+#for sent in tokenized_sens:
+    #print(sent)
+    #for tree in nltk.ChartParser(grammar).parse(sent):
+        #print(tree)
 
 
-wordToWord = {
-    "7":"7",
+wordToWord = {"7":"7",
     "this":"esto",
     "the":"el",
     "a":"un",
@@ -138,7 +140,10 @@ wordToWord = {
     "know":"saber",
     "need":"necesidad",
     "am":"soy",
-    "is":"es"
-}
+    "is":"es"}
+
+espn = [" ".join([wordToWord[wor] for wor in sent]) for sent in tokenized_sens]
+espn = [s[0].upper() + s[1:] + '.' for s in espn]
+print(espn)
 #print(grammar.productions())
 #print([(sen, grammar.check_coverage([y for (x, y) in word_tokenize(sen)])) for sen in lines])
