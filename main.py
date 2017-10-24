@@ -168,7 +168,7 @@ googleTranslate = ["Odio esto.",
     "No puedo decir si estoy llorando.",
     "Acabo de pasar 7 horas jugando con las fuentes."]
 
-googleTranslate = [s.replace('.', '') for s in googleTranslate]
+googleTranslate = [lowerCaseFirstCharacter(s.replace('.', '')) for s in googleTranslate]
 
 espn = [cleanTokenizedSent(sent) for sent in tokenized_sens]
 
