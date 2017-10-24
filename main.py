@@ -3,7 +3,7 @@ from nltk import word_tokenize
 from nltk.util import ngrams
 from functools import reduce
 from tabulate import tabulate
-from nltk.tree import *
+import nltk.tree
 from nltk.draw import tree
 
 def overlap(from_l, to_l):
@@ -16,8 +16,6 @@ def overlap(from_l, to_l):
 def listConcat(x, y):
     x.extend(y)
     return x
-
-[x ** 2 for x in range(4, 10)]
 
 def formatWordList(words):
     valsAsStrs =['"' + x + '"' for x in words]
@@ -39,6 +37,7 @@ def cleanTokenizedSent(sent):
 def upperCase(sent):
     return sent[0].upper() + sent[1:]
 
+# list of sentences to parse
 lines = ["I hate this.",
     "Running is terrible.",
     "Everything is the worst.",
@@ -52,15 +51,17 @@ lines = ["I hate this.",
     "I can not tell if I am crying.",
     "I just spent 7 hours playing with fonts."]
 
+# scrub the input sentences to have no capital letters, remove periods
 lines = [lowerCaseFirstCharacter(line.replace('.', '')) for line in lines]
-
+# tokenize the sentences into lists of words
 tokenized_sens = [word_tokenize(sen) for sen in lines]
-
+# tag each word token with a part of speech using NLTK's POS tagger
 taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
-
+# merges lists of tags into a single list
 taggedWords = reduce(listConcat, taggedSens, [])
-#print(taggedWords)
 
+# creates the set of first ply rules by setting the left side of rules to a
+# POS tag and the right side to include all words tagged with that part of speech
 tagPossb = {}
 for (word, tag) in taggedWords:
     if tag not in tagPossb:
@@ -69,19 +70,21 @@ for (word, tag) in taggedWords:
         words = set(tagPossb[tag])
         words.add(word)
         tagPossb[tag] = tuple(words)
-
 firstPlyRules = "\n".join(makeBottomPly(tagPossb))
-
+# manually created grammar rules based on observed POS structure
 higherLevelRules = """
 S -> NP VP | RB S
 VP -> RB VP | MD VP | VP PP | VBN PP | VBD VP | TO VP | VBP DT | VBP TO VP | VBZ JJ | VBZ DT JJS | VBZ DT VBN | VBP PRP | VBD IN NN | VB DT NN | VB VP | VB PP | VBP VBG | VBD NP | VBP PP
 PP -> IN NP | IN PP | PP VP | VBG PP
 NP -> NN | PRP | DT NP | NN PRP VBD IN | CD NNS | NNS
 """
-
+# merges both sets of rules to create the full rule set, then
+# passes it to the grammar
 rules = higherLevelRules + firstPlyRules
 grammar = nltk.CFG.fromstring(rules)
 
+# allows visualization of the parse trees in separate windows
+# not part of assignment, so commented out
 # print('----------------------\n\n\n')
 # v = 1
 # for sent in tokenized_sens:
@@ -90,7 +93,7 @@ grammar = nltk.CFG.fromstring(rules)
 #         tree.draw()
 #     v += 1
 
-
+# word to word transduction lexicon given by assignment, in dictionary form
 wordToWord = {"7":"7",
     "this":"esto",
     "the":"el",
@@ -147,6 +150,7 @@ wordToWord = {"7":"7",
     "am":"soy",
     "is":"es"}
 
+# list of sentences translated through Google Translate (gold standard), also given
 googleTranslate = ["Odio esto.",
     "Correr es terrible.",
     "Todo es lo peor.",
@@ -159,11 +163,14 @@ googleTranslate = ["Odio esto.",
     "Necesito ir a banarme.",
     "No puedo decir si estoy llorando.",
     "Acabo de pasar 7 horas jugando con las fuentes."]
-
+# scrub the gold standard sentences the same way the input sentences were scrubbed
 googleTranslate = [lowerCaseFirstCharacter(s.replace('.', '')) for s in googleTranslate]
-
+# translate the english sentences to spanish by looking up the words in the
+# lexicon, changing them to spanish, then connecting them into a sentence
 espn = [cleanTokenizedSent(sent) for sent in tokenized_sens]
 
+# calculate the BLEU score for each sentence as the average of the
+# BLEU-1, BLEU-2, BLEU-3, and BLEU-4 scores
 bleu = []
 for i in range(len(espn)):
     scores = []
@@ -173,11 +180,14 @@ for i in range(len(espn)):
         hits = overlap(sourceNgrams, standardNgrams)
         if hits != 0:
             scores.append(hits / len(sourceNgrams))
+    # ignore any BLEU-n score if it is 0, and reduce the
+    # denominator of the average accordingly
     if len(scores) != 0:
         bleu.append(sum(scores) / len(scores))
     else:
         bleu.append(0)
 
+# create a table for printing out the BLEU scores nicely
 tabl = [[i, bleu[i - 1]] for i in range(1, 13)]
 
 ct = 1
