@@ -3,6 +3,8 @@ from nltk import word_tokenize
 from nltk.util import ngrams
 from functools import reduce
 from tabulate import tabulate
+from nltk.tree import *
+from nltk.draw import tree
 
 def overlap(from_l, to_l):
     to_s = set(to_l)
@@ -32,11 +34,10 @@ def lowerCaseFirstCharacter(s):
         return s[0].lower() + s[1:]
 
 def cleanTokenizedSent(sent):
-    asString = " ".join([wordToWord[wor] for wor in sent])
-    return asString
+    return " ".join([wordToWord[wor] for wor in sent])
 
 def upperCase(sent):
-    return sent[0].upper() + asString[1:]
+    return sent[0].upper() + sent[1:]
 
 lines = ["I hate this.",
     "Running is terrible.",
@@ -51,15 +52,12 @@ lines = ["I hate this.",
     "I can not tell if I am crying.",
     "I just spent 7 hours playing with fonts."]
 
-# for s in lines:
-#     s.replace("didn't", "did not")
-
 lines = [lowerCaseFirstCharacter(line.replace('.', '')) for line in lines]
 
 tokenized_sens = [word_tokenize(sen) for sen in lines]
 
 taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
-#print(taggedSens)
+
 taggedWords = reduce(listConcat, taggedSens, [])
 #print(taggedWords)
 
@@ -72,31 +70,25 @@ for (word, tag) in taggedWords:
         words.add(word)
         tagPossb[tag] = tuple(words)
 
-# get rid of the period because it doesn't matter
-# tagPossb.pop('.', None)
-
 firstPlyRules = "\n".join(makeBottomPly(tagPossb))
 
-#print(firstPlyRules)
-
-
 higherLevelRules = """
-S -> NP VP | RB S | S VP | VP | S PP
-VP -> MD VB | MD VP | VBN PP | VBD VP | VP VB PP | TO VP | VBP PP | VBP DT | VBP S | VBZ JJ | VBZ DT JJS | VBZ DT VBN | VBP PRP | VBD IN NN | VB DT NN | VB VP | VBP VBG | RB VP | VBD NP | VBG PP
-VBD -> VBD RB | RB VBD
-PP -> IN NP | IN S | IN PP | IN NNS
-NP -> NN | DT NN | DT NNS | PRP | DT JJ NN | VBG | DT NP | NN PRP VBD IN | CD NNS
-MD -> MD RB
+S -> NP VP | RB S
+VP -> RB VP | MD VP | VP PP | VBN PP | VBD VP | TO VP | VBP DT | VBP TO VP | VBZ JJ | VBZ DT JJS | VBZ DT VBN | VBP PRP | VBD IN NN | VB DT NN | VB VP | VB PP | VBP VBG | VBD NP | VBP PP
+PP -> IN NP | IN PP | PP VP | VBG PP
+NP -> NN | PRP | DT NP | NN PRP VBD IN | CD NNS | NNS
 """
-rules = higherLevelRules + firstPlyRules
 
+rules = higherLevelRules + firstPlyRules
 grammar = nltk.CFG.fromstring(rules)
 
-#print('----------------------\n\n\n')
-#for sent in tokenized_sens:
-    #print(sent)
-    #for tree in nltk.ChartParser(grammar).parse(sent):
-        #print(tree)
+# print('----------------------\n\n\n')
+# v = 1
+# for sent in tokenized_sens:
+#     for tree in nltk.ChartParser(grammar).parse(sent):
+#         print(v, sent)
+#         tree.draw()
+#     v += 1
 
 
 wordToWord = {"7":"7",
@@ -187,6 +179,12 @@ for i in range(len(espn)):
         bleu.append(0)
 
 tabl = [[i, bleu[i - 1]] for i in range(1, 13)]
+
+ct = 1
+for sen in espn:
+    print(str(ct) + ': ' + upperCase(sen) + '.')
+    ct += 1
+print('\n')
 print(tabulate(tabl, headers=['Sentence', 'BLEU Score']))
 
 #print(grammar.productions())
