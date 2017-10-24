@@ -1,3 +1,6 @@
+# Kerim Celik
+# Jack Wines
+
 import nltk
 from nltk import word_tokenize
 from nltk.util import ngrams
@@ -6,6 +9,7 @@ from tabulate import tabulate
 from nltk.tree import *
 from nltk.draw import tree
 
+# returns # items in from_l also in to_l
 def overlap(from_l, to_l):
     to_s = set(to_l)
     count = 0
@@ -13,30 +17,35 @@ def overlap(from_l, to_l):
         count += item in to_s
     return count
 
+# concatnates two lists
 def listConcat(x, y):
     x.extend(y)
     return x
 
 [x ** 2 for x in range(4, 10)]
-
+# takes words in, outputs CFG-style rules
 def formatWordList(words):
     valsAsStrs =['"' + x + '"' for x in words]
     joined = " | ".join(valsAsStrs)
     return joined
 
+# takes in words + tags, yields CFG
 def makeBottomPly(tagPossb):
     return [key + ' -> ' + formatWordList(words) for key, words in tagPossb.items()]
 
+# turns the first character lower case
 def lowerCaseFirstChar(s):
     if s[0] == 'I' and s[1] == ' ':
         return s
     else:
         return s[0].lower() + s[1:]
 
+# Turns the list of words into sentences
 def cleanTokenizedSent(sent):
     return " ".join([wordToWord[wor] for wor in sent])
 
-def upperCase(sent):
+# Makes the first character upper case
+def upperCaseFirstChar(sent):
     return sent[0].upper() + sent[1:]
 
 lines = ["I hate this.",
@@ -62,7 +71,6 @@ tokenized_sens = [word_tokenize(sen) for sen in lines]
 taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
 
 taggedWords = reduce(listConcat, taggedSens, [])
-#print(taggedWords)
 
 tagPossb = {}
 for (word, tag) in taggedWords:
@@ -163,6 +171,7 @@ googleTranslate = ["Odio esto.",
     "No puedo decir si estoy llorando.",
     "Acabo de pasar 7 horas jugando con las fuentes."]
 
+unModGoogleTranslate = googleTranslate
 googleTranslate = [lowerCaseFirstChar(s.replace('.', '')) for s in googleTranslate]
 
 espn = [cleanTokenizedSent(sent) for sent in tokenized_sens]
@@ -181,14 +190,15 @@ for i in range(len(espn)):
     else:
         bleu.append(0)
 
-tabl = [[i, bleu[i - 1]] for i in range(1, 13)]
+tabl = zip(range(1, 13), unModGoogleTranslate, bleu)
 
-ct = 1
-for sen in espn:
-    print(str(ct) + ': ' + upperCase(sen) + '.')
-    ct += 1
+
+prettyTranslatedEspn = [upperCaseFirstChar(sen) for sen in espn]
+print(tabulate(zip(range(1,13), prettyTranslatedEspn),
+    headers = ('#','Translation')))
+
 print('\n')
-print(tabulate(tabl, headers=['Sentence', 'BLEU Score']))
+print(tabulate(tabl, headers=['#', 'Sentence', 'BLEU Score']))
 
 #print(grammar.productions())
 #print([(sen, grammar.check_coverage([y for (x, y) in word_tokenize(sen)])) for sen in lines])
