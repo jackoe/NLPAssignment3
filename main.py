@@ -61,7 +61,7 @@ lines = ["I hate this.",
     "I just spent 7 hours playing with fonts."]
 
 # scrub the input sentences to have no capital letters, remove periods
-lines = [lowerCaseFirstCharacter(line.replace('.', '')) for line in lines]
+lines = [lowerCaseFirstChar(line.replace('.', '')) for line in lines]
 # tokenize the sentences into lists of words
 tokenized_sens = [word_tokenize(sen) for sen in lines]
 # tag each word token with a part of speech using NLTK's POS tagger
@@ -160,7 +160,7 @@ wordToWord = {"7":"7",
     "is":"es"}
 
 # list of sentences translated through Google Translate (gold standard), also given
-googleTranslate = ["Odio esto.",
+unModGoogleTranslate = ["Odio esto.",
     "Correr es terrible.",
     "Todo es lo peor.",
     "A veces siento que naci con una fuga.",
@@ -172,8 +172,9 @@ googleTranslate = ["Odio esto.",
     "Necesito ir a banarme.",
     "No puedo decir si estoy llorando.",
     "Acabo de pasar 7 horas jugando con las fuentes."]
+
 # scrub the gold standard sentences the same way the input sentences were scrubbed
-googleTranslate = [lowerCaseFirstChar(s.replace('.', '')) for s in googleTranslate]
+googleTranslate = [lowerCaseFirstChar(s.replace('.', '')) for s in unModGoogleTranslate]
 # translate the english sentences to spanish by looking up the words in the
 # lexicon, changing them to spanish, then connecting them into a sentence
 espn = [cleanTokenizedSent(sent) for sent in tokenized_sens]
@@ -197,15 +198,11 @@ for i in range(len(espn)):
         bleu.append(0)
 
 # create a table for printing out the BLEU scores nicely
-tabl = zip(range(1, 13), unModGoogleTranslate, bleu)
+prettyTranslatedEspn = [upperCaseFirstChar(sen) + '.' for sen in espn]
+tabl = zip(range(1, 13), prettyTranslatedEspn, bleu)
 
-
-prettyTranslatedEspn = [upperCaseFirstChar(sen) for sen in espn]
-print(tabulate(zip(range(1,13), prettyTranslatedEspn),
-    headers = ('#','Translation')))
-
-print('\n')
-print(tabulate(tabl, headers=['#', 'Sentence', 'BLEU Score']))
+# Pretty print our translations
+print(tabulate(tabl, headers=['#', 'Our Translation', 'BLEU Score']))
 
 #print(grammar.productions())
 #print([(sen, grammar.check_coverage([y for (x, y) in word_tokenize(sen)])) for sen in lines])
