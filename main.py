@@ -32,8 +32,10 @@ def lowerCaseFirstCharacter(s):
 
 def cleanTokenizedSent(sent):
     asString = " ".join([wordToWord[wor] for wor in sent])
-    capitalized = asString[0].upper() + asString[1:]
-    return capitalized
+    return asString
+
+def upperCase(sent):
+    return sent[0].upper() + asString[1:]
 
 lines = ["I hate this.",
     "Running is terrible.",
