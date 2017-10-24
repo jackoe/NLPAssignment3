@@ -25,7 +25,7 @@ def formatWordList(words):
 def makeBottomPly(tagPossb):
     return [key + ' -> ' + formatWordList(words) for key, words in tagPossb.items()]
 
-def lowerCaseFirstCharacter(s):
+def lowerCaseFirstChar(s):
     if s[0] == 'I' and s[1] == ' ':
         return s
     else:
@@ -54,7 +54,7 @@ lines = ["I hate this.",
 # for s in lines:
 #     s.replace("didn't", "did not")
 
-lines = [lowerCaseFirstCharacter(line.replace('.', '')) for line in lines]
+lines = [lowerCaseFirstChar(line.replace('.', '')) for line in lines]
 
 tokenized_sens = [word_tokenize(sen) for sen in lines]
 
@@ -168,7 +168,7 @@ googleTranslate = ["Odio esto.",
     "No puedo decir si estoy llorando.",
     "Acabo de pasar 7 horas jugando con las fuentes."]
 
-googleTranslate = [lowerCaseFirstCharacter(s.replace('.', '')) for s in googleTranslate]
+googleTranslate = [lowerCaseFirstChar(s.replace('.', '')) for s in googleTranslate]
 
 espn = [cleanTokenizedSent(sent) for sent in tokenized_sens]
 
