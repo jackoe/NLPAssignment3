@@ -2,6 +2,7 @@ import nltk
 from nltk import word_tokenize
 from nltk.util import ngrams
 from functools import reduce
+from tabulate import tabulate
 
 def overlap(from_l, to_l):
     to_s = set(to_l)
@@ -179,7 +180,11 @@ for i in range(len(espn)):
             scores.append(hits / len(sourceNgrams))
     if len(scores) != 0:
         bleu.append(sum(scores) / len(scores))
-print(bleu)
+    else:
+        bleu.append(0)
+
+tabl = [[i, bleu[i - 1]] for i in range(1, 13)]
+print(tabulate(tabl, headers=['Sentence', 'BLEU Score']))
 
 #print(grammar.productions())
 #print([(sen, grammar.check_coverage([y for (x, y) in word_tokenize(sen)])) for sen in lines])
