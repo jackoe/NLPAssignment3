@@ -30,6 +30,11 @@ def lowerCaseFirstCharacter(s):
     else:
         return s[0].lower() + s[1:]
 
+def cleanTokenizedSent(sent):
+    asString = " ".join([wordToWord[wor] for wor in sent])
+    capitalized = asString[0].upper() + asString[1:]
+    return capitalized
+
 lines = ["I hate this.",
     "Running is terrible.",
     "Everything is the worst.",
@@ -54,9 +59,6 @@ taggedSens = [nltk.pos_tag(word_tokenize(sen)) for sen in lines]
 #print(taggedSens)
 taggedWords = reduce(listConcat, taggedSens, [])
 #print(taggedWords)
-
-#for sent in taggedSens:
-    #print(sent)
 
 tagPossb = {}
 for (word, tag) in taggedWords:
@@ -165,8 +167,7 @@ googleTranslate = ["Odio esto.",
 
 googleTranslate = [s.replace('.', '') for s in googleTranslate]
 
-espn = [" ".join([wordToWord[wor] for wor in sent]) for sent in tokenized_sens]
-espn = [s[0].upper() + s[1:] for s in espn]
+espn = [cleanTokenizedSent(sent) for sent in tokenized_sens]
 
 bleu = []
 for i in range(len(espn)):
