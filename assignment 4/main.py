@@ -59,6 +59,7 @@ def addToMultiset(multi, toAdd):
         multi[toAdd] = 1
     else:
         multi[toAdd] += 1
+    return multi
 
 def multisetGet(multi, val):
     if val not in multi:
@@ -69,13 +70,24 @@ def multisetGet(multi, val):
 def makeMultiSet(l):
     return reduce(addToMultiset, l, {})
 
+def makeSentenceVector(sentenceMultiSet, allWords):
+    return [multisetGet(sentenceMultiSet, word) for word in allWords]
+
 
 def getInputVectorsFromSentences(fileName):
     with open(fileName, 'r') as f:
-        lines = list(f)
-        sentences = shuffle(lines)[:50]
-        words = [tokenize for sentence in sentences]
-        sentenceMultiSets = [makeMultiSet(sentence) for sentence in words]
+        cleanSentences = [sentence.replace("\n","").lower() for sentence in f]
+        shuffle(cleanSentences)
+        sentences = scleanSentences[:50]
+        tokenizedSentences = [tokenize(sentence) for sentence in sentences]
+        print(tokenizedSentences)
+        sentenceMultiSets = [makeMultiSet(sentence) for sentence in tokenizedSentences]
+        allWords = set(reduce(lambda x,y: x+y, tokenizedSentences))
+        print(allWords)
+        sentenceVectors = [[sentence] + makeSentenceVector(sentenceMultiset, allWords)
+                for sentence, sentenceMultiset, tokenizedSentence in
+                zip(sentences, sentenceMultiSets, tokenizedSentences)]
+        return sentenceVectors
 
 
 
@@ -84,6 +96,8 @@ def getInputVectorsFromSentences(fileName):
 
 
 
-output_cosine_similarity(get50Pairs('even50morePairs.txt'))
-# print(list(get50Pairs()))
-output_cosine_similarity(get50Pairs('moodleOutput.txt'))
+#output_cosine_similarity(get50Pairs('even50morePairs.txt'))
+sentenceVectors = getInputVectorsFromSentences('Assignment_4_Input.txt')
+vecPairs = zip(sentenceVectors[:25], sentenceVectors[25:])
+output_cosine_similarity(vecPairs)
+
