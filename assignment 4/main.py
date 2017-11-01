@@ -58,6 +58,7 @@ def addToMultiset(multi, toAdd):
 
 
 def makeMultiSet(l):
+    return reduce(addToMultiset, l, {})
 
 
 def getInputVectorsFromSentences(fileName):
@@ -66,6 +67,8 @@ def getInputVectorsFromSentences(fileName):
         sentences = shuffle(lines)[:50]
         words = [[tokenize for word in sentence] 
                 for sentence in sentences]
+        sentenceMultiSets = [makeMultiSet(sentence) for sentence in words]
+
 
 
 
