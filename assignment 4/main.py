@@ -28,7 +28,7 @@ def get50Pairs(fileName):
         halfway = len(lines) // 2
         print(halfway)
         pairs = zip(lines[:halfway], lines[halfway:])
-    return pairs
+    return list(pairs)
 
 def snd(t):
     (_, t2) = t
@@ -46,5 +46,6 @@ def output_cosine_similarity(vecPairs):
 
 
 
-output_cosine_similarity(list(get50Pairs('even50morePairs.txt')))
+output_cosine_similarity(get50Pairs('even50morePairs.txt'))
 # print(list(get50Pairs()))
+output_cosine_similarity(get50Pairs('moodleOutput.txt')
