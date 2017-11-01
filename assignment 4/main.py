@@ -51,8 +51,11 @@ def output_cosine_similarity(vecPairs):
     table.sort(key = snd, reverse = True)
     print(tabulate(table, headers=["Word Pair", "Cosine Similarity"]))
 
+def removeFromStr(theStr, toRemove):
+    return theStr.replace(toRemove, '')
+
 def tokenize(sentence):
-    return word_tokenize(sentence.replace(",", "").replace(".", " "))
+    return word_tokenize(reduce(removeFromStr, ",.\"'!?", sentence))
 
 def addToMultiset(multi, toAdd):
     if toAdd not in multi:
@@ -71,19 +74,20 @@ def makeMultiSet(l):
     return reduce(addToMultiset, l, {})
 
 def makeSentenceVector(sentenceMultiSet, allWords):
+    print(sentenceMultiSet)
     return [multisetGet(sentenceMultiSet, word) for word in allWords]
 
 
 def getInputVectorsFromSentences(fileName):
     with open(fileName, 'r') as f:
-        cleanSentences = [sentence.replace("\n","").lower() for sentence in f]
-        shuffle(cleanSentences)
-        sentences = scleanSentences[:50]
-        tokenizedSentences = [tokenize(sentence) for sentence in sentences]
-        print(tokenizedSentences)
+        sentences = [sentence.replace("\n", "") for sentence in f]
+        shuffle(sentences)
+        sentences = sentences[:50]
+        cleanSentences = [sentence.lower() for sentence in sentences]
+        tokenizedSentences = [tokenize(sentence) for sentence in cleanSentences]
         sentenceMultiSets = [makeMultiSet(sentence) for sentence in tokenizedSentences]
         allWords = set(reduce(lambda x,y: x+y, tokenizedSentences))
-        print(allWords)
+        print(sentences)
         sentenceVectors = [[sentence] + makeSentenceVector(sentenceMultiset, allWords)
                 for sentence, sentenceMultiset, tokenizedSentence in
                 zip(sentences, sentenceMultiSets, tokenizedSentences)]
