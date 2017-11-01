@@ -1,6 +1,5 @@
 # Kerim Celik
 # Jack Wines
-from math import abs
 from math import sqrt
 from tabulate import tabulate
 
@@ -15,7 +14,7 @@ def normalize(vec):
     return [x / vecMagnitude for x in vec]
 
 def calc_cosine_similarity(vec1, vec2):
-    return math.abs(dotProduct(normalize(vec1), normalize(vec2))
+    return abs(dotProduct(normalize(vec1), normalize(vec2))
 )
 def parseLine(line):
     l = line.split()
@@ -31,15 +30,21 @@ def get50Pairs(fileName):
         pairs = zip(lines[:halfway], lines[halfway:])
     return pairs
 
+def snd(t):
+    (_, t2) = t
+    return t2
+
 def output_cosine_similarity(vecPairs):
     wordPairs = []
     scores = []
     for tup in vecPairs:
         wordPairs.append((tup[0][0], tup[1][0]))
         scores.append(calc_cosine_similarity(tup[0][1:], tup[1][1:]))
-    print(tabulate(zip(wordPairs, scores), headers=["Word Pair", "Cosine Similarity"]))
+    table = list(zip(wordPairs, scores))
+    table.sort(key = snd, reverse = True)
+    print(tabulate(table, headers=["Word Pair", "Cosine Similarity"]))
 
 
 
-output_cosine_similarity(list(get50Pairs('50morePairs.txt')))
+output_cosine_similarity(list(get50Pairs('even50morePairs.txt')))
 # print(list(get50Pairs()))
