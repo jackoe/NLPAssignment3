@@ -2,6 +2,9 @@
 # Jack Wines
 from math import sqrt
 from tabulate import tabulate
+from random import shuffle
+from nltk import word_tokenize
+from functools import reduce
 
 def dotProduct(vec1, vec2):
     return sum([x * y for x,y in zip(vec1, vec2)])
@@ -20,15 +23,19 @@ def parseLine(line):
     l = line.split()
     return [l[0]] + [float(x) for x in l[1:]]
 
+
+def makePairs(lines):
+    lines = [parseLine(line) for line in lines]
+    halfway = len(lines) // 2
+    pairs = zip(lines[:halfway], lines[halfway:])
+    return list(pairs)
+
+
 def get50Pairs(fileName):
     pairs = None
     with open(fileName, 'r') as f:
         lines = list(f)
-        lines = [parseLine(line) for line in lines]
-        halfway = len(lines) // 2
-        print(halfway)
-        pairs = zip(lines[:halfway], lines[halfway:])
-    return list(pairs)
+        return makePairs(lines)
 
 def snd(t):
     (_, t2) = t
@@ -44,8 +51,28 @@ def output_cosine_similarity(vecPairs):
     table.sort(key = snd, reverse = True)
     print(tabulate(table, headers=["Word Pair", "Cosine Similarity"]))
 
+def tokenize(sentence):
+    return word_tokenize(word.replace(",", "").replace(".", " "))
+
+def addToMultiset(multi, toAdd):
+
+
+def makeMultiSet(l):
+
+
+def getInputVectorsFromSentences(fileName):
+    with open(fileName, 'r') as f:
+        lines = list(f)
+        sentences = shuffle(lines)[:50]
+        words = [[tokenize for word in sentence] 
+                for sentence in sentences]
+
+
+
+
+
 
 
 output_cosine_similarity(get50Pairs('even50morePairs.txt'))
 # print(list(get50Pairs()))
-output_cosine_similarity(get50Pairs('moodleOutput.txt')
+output_cosine_similarity(get50Pairs('moodleOutput.txt'))
