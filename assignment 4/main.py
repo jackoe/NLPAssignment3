@@ -20,9 +20,9 @@ def parseLine(line):
     l = line.split()
     return [l[0]] + [float(x) for x in l[1:]]
 
-def get50Pairs():
+def get50Pairs(fileName):
     pairs = None
-    with open('50pairs.txt', 'r') as f:
+    with open(fileName, 'r') as f:
         lines = list(f)
         lines = [parseLine(line) for line in lines]
         halfway = len(lines) // 2
@@ -40,5 +40,5 @@ def output_cosine_similarity(vecPairs):
 
 
 
-output_cosine_similarity(list(get50Pairs()))
+output_cosine_similarity(list(get50Pairs('50morePairs.txt')))
 # print(list(get50Pairs()))
