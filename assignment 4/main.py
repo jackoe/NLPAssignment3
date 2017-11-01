@@ -52,10 +52,19 @@ def output_cosine_similarity(vecPairs):
     print(tabulate(table, headers=["Word Pair", "Cosine Similarity"]))
 
 def tokenize(sentence):
-    return word_tokenize(word.replace(",", "").replace(".", " "))
+    return word_tokenize(sentence.replace(",", "").replace(".", " "))
 
 def addToMultiset(multi, toAdd):
+    if toAdd not in multi:
+        multi[toAdd] = 1
+    else:
+        multi[toAdd] += 1
 
+def multisetGet(multi, val):
+    if val not in multi:
+        return 0;
+    else:
+        return multi[val]
 
 def makeMultiSet(l):
 
@@ -64,8 +73,7 @@ def getInputVectorsFromSentences(fileName):
     with open(fileName, 'r') as f:
         lines = list(f)
         sentences = shuffle(lines)[:50]
-        words = [[tokenize for word in sentence] 
-                for sentence in sentences]
+        words = [tokenize for sentence in sentences]
 
 
 
