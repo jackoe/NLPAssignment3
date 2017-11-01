@@ -1,5 +1,6 @@
 # Kerim Celik
 # Jack Wines
+from math import abs
 from math import sqrt
 from tabulate import tabulate
 
@@ -14,8 +15,8 @@ def normalize(vec):
     return [x / vecMagnitude for x in vec]
 
 def calc_cosine_similarity(vec1, vec2):
-    return (dotProduct(normalize(vec1), normalize(vec2)))
-
+    return math.abs(dotProduct(normalize(vec1), normalize(vec2))
+)
 def parseLine(line):
     l = line.split()
     return [l[0]] + [float(x) for x in l[1:]]
