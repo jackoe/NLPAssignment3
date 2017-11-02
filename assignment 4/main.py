@@ -21,7 +21,7 @@ def normalize(vec):
 
 # calculate cosine similarity between two specified vectors
 def calc_cosine_similarity(vec1, vec2):
-    return abs(dotProduct(normalize(vec1), normalize(vec2)))
+    return dotProduct(normalize(vec1), normalize(vec2))
 
 # used to parse the vector bank, converts all values in a vector into floats
 # from strings except the string representing the word
