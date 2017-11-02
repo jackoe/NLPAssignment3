@@ -55,9 +55,9 @@ def output_cosine_similarity(vecPairs):
     for tup in vecPairs:
         wordPairs.append((tup[0][0], tup[1][0]))
         scores.append(calc_cosine_similarity(tup[0][1:], tup[1][1:]))
-    table = list(zip(wordPairs, scores))
-    table.sort(key = snd, reverse = True)
-    print(tabulate(table, headers=["Pairing", "Cosine Similarity"]))
+    table = [x + (y,) for x,y in (zip(wordPairs, scores))]
+    table.sort(key = lambda l: l[2], reverse = True)
+    print(tabulate(table, headers=["1", "2", "Cosine Similarity"]))
 
 # removes a specific string from within another passed string
 def removeFromStr(theStr, toRemove):
