@@ -83,29 +83,33 @@ def multisetGet(multi, val):
     else:
         return multi[val]
 
-#
+# creates a multiset from list (dictionary from items to counts
 def makeMultiSet(l):
     return reduce(addToMultiset, l, {})
 
-#
+# given a multiset of words in a sentence, returns the word-count vector.
 def makeSentenceVector(sentenceMultiSet, allWords):
-    #print(sentenceMultiSet)
     return [multisetGet(sentenceMultiSet, word) for word in allWords]
 
-#
+#given a file name, returns the sentence vectors.
 def getInputVectorsFromSentences(fileName):
     with open(fileName, 'r') as f:
+        # we want to keep around the unclean sentences so we can print them later
         sentences = [sentence.replace("\n", "") for sentence in f]
+        # get the first 50 random sentences
         shuffle(sentences)
         sentences = sentences[:50]
+        # lowercase everything
         cleanSentences = [sentence.lower() for sentence in sentences]
+        # turn it from a sentences to a multiset of words
         tokenizedSentences = [tokenize(sentence) for sentence in cleanSentences]
         sentenceMultiSets = [makeMultiSet(sentence) for sentence in tokenizedSentences]
+        #get all of the words in all of the sentences
         allWords = set(reduce(lambda x,y: x+y, tokenizedSentences))
-        # print(sentences)
+        # for every sentence, make the sentence vector
         sentenceVectors = [[sentence] + makeSentenceVector(sentenceMultiset, allWords)
-                for sentence, sentenceMultiset, tokenizedSentence in
-                zip(sentences, sentenceMultiSets, tokenizedSentences)]
+                for (sentence , sentenceMultiset , tokenizedSentence in
+                 zip(sentences, sentenceMultiSets, tokenizedSentences)]
         return sentenceVectors
 
 
