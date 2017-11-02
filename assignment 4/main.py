@@ -95,12 +95,7 @@ def getInputVectorsFromSentences(fileName):
 
 
 
-
-
-
-
-
-#output_cosine_similarity(get50Pairs('even50morePairs.txt'))
+output_cosine_similarity(get50Pairs('even50morePairs.txt'))
 sentenceVectors = getInputVectorsFromSentences('Assignment_4_Input.txt')
 vecPairs = zip(sentenceVectors[:25], sentenceVectors[25:])
 output_cosine_similarity(vecPairs)
