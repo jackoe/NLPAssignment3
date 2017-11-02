@@ -28,7 +28,7 @@ def makePairs(lines):
     lines = [parseLine(line) for line in lines]
     halfway = len(lines) // 2
     pairs = zip(lines[:halfway], lines[halfway:])
-    return list(pairs)
+    return [lines[x:x+2] for x in range(0,len(lines),2)]
 
 
 def get50Pairs(fileName):
@@ -95,7 +95,7 @@ def getInputVectorsFromSentences(fileName):
 
 
 
-output_cosine_similarity(get50Pairs('even50morePairs.txt'))
+output_cosine_similarity(get50Pairs('handPickedWords.txt'))
 sentenceVectors = getInputVectorsFromSentences('Assignment_4_Input.txt')
 vecPairs = zip(sentenceVectors[:25], sentenceVectors[25:])
 output_cosine_similarity(vecPairs)
