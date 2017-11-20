@@ -88,7 +88,8 @@ def makeMultiSet(l):
     return reduce(addToMultiset, l, {})
 
 # given a multiset of words in a sentence, returns the word-count vector.
-def makeSentenceVector(sentenceMultiSet, allWords):
+def makeSentenceVector(sentence, allWords):
+    sentenceMultiSet = makeMultiSet(tokenize(sentence.lower()))
     return [multisetGet(sentenceMultiSet, word) for word in allWords]
 
 #given a file name, returns the sentence vectors.
@@ -103,11 +104,10 @@ def getInputVectorsFromSentences(fileName):
         cleanSentences = [sentence.lower() for sentence in sentences]
         # turn it from a sentences to a multiset of words
         tokenizedSentences = [tokenize(sentence) for sentence in cleanSentences]
-        sentenceMultiSets = [makeMultiSet(sentence) for sentence in tokenizedSentences]
         #get all of the words in all of the sentences
         allWords = set(reduce(lambda x,y: x+y, tokenizedSentences))
         # for every sentence, make the sentence vector
-        sentenceVectors = [[sentence] + makeSentenceVector(makeMultiSet(sentence), allWords)
+        sentenceVectors = [[sentence] + makeSentenceVector(sentence, allWords)
                 for sentence in sentences]
         return sentenceVectors
 
