@@ -107,9 +107,8 @@ def getInputVectorsFromSentences(fileName):
         #get all of the words in all of the sentences
         allWords = set(reduce(lambda x,y: x+y, tokenizedSentences))
         # for every sentence, make the sentence vector
-        sentenceVectors = [[sentence] + makeSentenceVector(sentenceMultiset, allWords)
-                for (sentence,  sentenceMultiset in
-                 zip(sentences, sentenceMultiSets)]
+        sentenceVectors = [[sentence] + makeSentenceVector(makeMultiSet(sentence), allWords)
+                for sentence in sentences]
         return sentenceVectors
 
 
